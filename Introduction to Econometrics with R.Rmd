@@ -1,0 +1,205 @@
+---
+title: "Introduciton to Econometrics with R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+a = c(1,2,3,4,5)
+```
+
+```{r}
+a = c(1,12,3,4,5)
+```
+
+```{r}
+a = seq(1,10,2)
+```
+
+Matrixes
+```{r}
+a = matrix(1:9)
+```
+
+```{r}
+a <- matrix(1:9, nrow=3, ncol=3, byrow=TRUE)
+```
+
+a*a is not how you do matrix multiplication
+
+Proper matrix multiplication %*%
+```{r}
+a%*%a
+```
+invert matrixes
+
+1/a - element wise multiplicaiton
+
+there is a function in R that is called solve(a), in this case a is a singular matrix which you cannot invert it,
+
+to make it non-singular we need to define a[], by changing six into seven (second row third columne)
+
+the command is a[2,3] = 7
+
+```{r}
+a
+```
+
+```{r}
+a[2,3] = 7
+```
+
+```{r}
+a
+```
+
+the matrix a times its inverse is going to yield the identity matrix
+```{r}
+solve(a) %*% a
+```
+Say that we want to see how long a person lives
+
+- air pollution
+- smoke , if you smoke its true =1 , or not smoke false =0
+
+
+```{r}
+surv = data.frame(life=c(56, 76, 89), smoke = c(T, F, F), gender = c("Male", "Male", "Female"))
+```
+
+```{r}
+attach(surv)
+```
+
+```{r}
+smoke
+```
+
+What is a list, it's a list of things to do. Think about it as a to do list.
+
+y is a vector
+```{r}
+b = list(x = 13, y =c(1,2,3), z="Paris", w=list(q = "hello", v=12))
+```
+
+what is a dollarsign? it accesses the sub-category
+
+a$x
+
+you will find x inside the list a
+
+```{r}
+b$w$q
+```
+
+rnorm(20 variables, 0 mean, 0.5 standard deviation)
+lsfit computes the regression, gives you coefficient estimate etc,
+model 1 is a list of things that we can see when we type in model1
+```{r}
+x = rnorm(20, 2, 3)
+y=3+2*x+rnorm(20, 0, 0.5)
+plot(x,y)
+model1=lsfit(x,y)
+```
+
+```{r}
+model1
+```
+- The error (or disturbance) of an observed value is the deviation of the observed value from the (unobservable) true value of a quantity of interest (for example, a population mean), 
+- and the residual of an observed value is the difference between the observed value and the estimated value of the quantity of interest (for example, a sample mean). 
+
+The distinction is most important in regression analysis, where the concepts are sometimes called the regression errors and regression residuals and where they lead to the concept of studentized residuals.
+
+---
+
+Why do we call it ab line? a+bx
+first we need to plot the abline as it comes after plot
+ 
+```{r}
+model1=lsfit(x,y)
+plot(x,y)
+abline(model1$coef)
+```
+
+```{r}
+model2=lsfit(x,y)
+plot(x,y)
+model2=lm(y-x)
+```
+
+#Make sure to label things for homework
+```{r}
+x = rnorm(20, 2, 3)
+y = 3+2*x + rnorm(20, 0, .5)
+plot(x,y)
+model2 = lsfit(x,y)
+abline(model2$coef)
+plot(x,y, xlab="name of macron", ylab="name of y", main="french politics")
+```
+#Parameter
+Use par() to see list different parameters for the function plot
+```{r}
+par()
+```
+
+Test a parameter
+
+- CEX = Character expansion of three
+```{r}
+plot(x,y, xlab="name of macron", ylab="name of y", main="Parameter", cex=3)
+```
+lwd changes the dots
+lty changes the distance between the dots
+```{r}
+plot(x,y)
+model2 = lsfit(x,y)
+par(cex=2, lwd=2, lty=3)
+abline(model2$coefficients)
+```
+Cube root of x
+
+Cube of -1 should be -1
+NaN gives Not a Number, why does it produce this? 
+Because R uses logarithms to carry out the computation. You cannot take cube root for a negative logarithm. Therefore we need to specify this more precisely.
+```{r}
+cube = function(x){x^(1/3)}
+cube(8)
+cube(-1)
+```
+
+== is equal
+```{r}
+cube = function(x){
+  if(x>0) z=x^(1/3)
+  if(x<0) z=-(-x)^(1/3)
+  if(x==0)z=0
+  z}
+```
+
+```{r}
+cube(-1)
+```
+
