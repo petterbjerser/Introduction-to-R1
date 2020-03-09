@@ -1,0 +1,141 @@
+
+Question 1: 
+Least Squares Estimate, of the Slope and the Intercept?
+- Slope 38.91
+- Intercept: 3.04
+
+Standard Errors?
+Check standard errors using R to calculate Mean and ??? Sxx
+
+- 
+
+```{r}
+model1 <- lsfit(ChickWeight$Time, ChickWeight$weight)
+
+moddiag <- ls.diag(model1)
+names(moddiag)
+moddiag$std.err
+
+```
+Check standard errors using R to calculate x and Sxx??
+- Intercept 3.04
+- X = 0.24
+
+Least Squares Estimate, of the Slope and the Intercept?
+- Slope 8.80
+- Intercept: 27.46
+
+Standard Errors?
+- Residual standard error 38.91
+- STE Intercept: 3.04
+- STE Time 0.24
+
+
+```{r}
+model2 <- lm(weight ~ Time, data=ChickWeight)
+summary(model2)
+```
+
+Question 2
+Superimpose the regresison line
+
+```{r}
+model1 <- lsfit(ChickWeight$Time, ChickWeight$weight)
+plot(ChickWeight$Time, ChickWeight$weight)
+abline(model1$coef)
+```
+Question 2
+- What is the weight on day 25 and 30?
+```{r}
+27.46+8.08*25
+27.46+8.08*30
+```
+
+Answer, 229.46 and 269.86 weight units
+
+Question 3
+
+Find the centroid of the dataset
+
+```{r}
+mean(ChickWeight$Time)
+mean(ChickWeight$weight)
+```
+
+X=10.72
+Y=121.80
+
+```{r}
+model2 <- lm(weight ~ Time, data=ChickWeight)
+summary(model2)
+
+fit1 <- fitted(model2)
+res1 <- residuals(model2)
+plot(fit1, res1)
+```
+Does this satisfy conditions for linear model?
+- The criteria of heteroskedasticity holds are uniformly distributed across each respective value.
+
+Second Question
+#1 Show by derivation that the hat matrix H and the matrix I - H are projections.
+
+See separate jpeg
+
+#2. Create a vector called spd
+```{r}
+View(cars)
+```
+
+```{r}
+spd <- c(cars$speed)
+```
+
+#Create a design matrix X
+
+Don't know wheter to use =25 or 50
+
+```{r}
+X = matrix(spd, nrow=25, ncol=2, byrow=T)
+X[1:25,1]=1
+View(X)
+```
+
+#3. Hat matrix
+
+H = X(X^tX)^(-1)X^t
+
+solv(A) Inverse of A where A is a square matrix.
+```{r}
+H = X%*%(solve((t(X)%*%X)))%*%t(X)
+diag(H)
+```
+
+```{r}
+h = H%*%H
+h
+```
+
+```{r}
+H
+```
+
+h=H 
+
+Answer: these seem to correspond 
+
+#4. Matrix calculation to find LSQE
+
+```{r}
+x = matrix(c(cars$speed), nrow=25, ncol=2, byrow=T)
+y = matrix(c(cars$dist), nrow=25, ncol=2, byrow=T)
+
+S = solve(t(x)%*%x)%*%t(x)%*%y
+S
+```
+These results does not correspond to those of the lm() function and thus there is something the reasoning and the code
+```{r}
+model2 <- lm(cars$dist ~ cars$speed)
+summary(model2)
+```
+
+
