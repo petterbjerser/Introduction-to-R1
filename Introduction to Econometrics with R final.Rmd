@@ -1,0 +1,745 @@
+---
+title: "Introduciton to Econometrics with R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+a = c(1,2,3,4,5)
+```
+
+```{r}
+a = c(1,12,3,4,5)
+```
+
+```{r}
+a = seq(1,10,2)
+View(a)
+```
+
+Matrixes
+```{r}
+a = matrix(1:9)
+```
+
+```{r}
+a <- matrix(1:9, nrow=3, ncol=3, byrow=TRUE)
+```
+
+a*a is not how you do matrix multiplication
+
+Proper matrix multiplication %*%
+```{r}
+a%*%a
+```
+invert matrixes
+
+1/a - element wise multiplicaiton
+
+there is a function in R that is called solve(a), in this case a is a singular matrix which you cannot invert it,
+
+to make it non-singular we need to define a[], by changing six into seven (second row third columne)
+
+the command is a[2,3] = 7
+
+```{r}
+a
+```
+
+```{r}
+a[2,3] = 7
+```
+
+```{r}
+a
+```
+
+the matrix a times its inverse is going to yield the identity matrix
+```{r}
+solve(a) %*% a
+```
+Say that we want to see how long a person lives
+
+- air pollution
+- smoke , if you smoke its true =1 , or not smoke false =0
+
+
+```{r}
+surv = data.frame(life=c(56, 76, 89), smoke = c(T, F, F), gender = c("Male", "Male", "Female"))
+```
+
+```{r}
+attach(surv)
+```
+
+```{r}
+smoke
+```
+
+What is a list, it's a list of things to do. Think about it as a to do list.
+
+y is a vector
+```{r}
+b = list(x = 13, y =c(1,2,3), z="Paris", w=list(q = "hello", v=12))
+```
+
+what is a dollarsign? it accesses the sub-category
+
+a$x
+
+you will find x inside the list a
+
+```{r}
+b$w$q
+```
+
+rnorm(20 variables, 0 mean, 0.5 standard deviation)
+lsfit computes the regression, gives you coefficient estimate etc,
+model 1 is a list of things that we can see when we type in model1
+```{r}
+x = rnorm(20, 2, 3)
+y=3+2*x+rnorm(20, 0, 0.5)
+plot(x,y)
+model1=lsfit(x,y)
+```
+
+```{r}
+model1
+```
+- The error (or disturbance) of an observed value is the deviation of the observed value from the (unobservable) true value of a quantity of interest (for example, a population mean), 
+- and the residual of an observed value is the difference between the observed value and the estimated value of the quantity of interest (for example, a sample mean). 
+
+The distinction is most important in regression analysis, where the concepts are sometimes called the regression errors and regression residuals and where they lead to the concept of studentized residuals.
+
+---
+
+Why do we call it ab line? a+bx
+first we need to plot the abline as it comes after plot
+ 
+```{r}
+model1=lsfit(x,y)
+plot(x,y)
+abline(model1$coef)
+```
+
+```{r}
+model2=lsfit(x,y)
+plot(x,y)
+model2=lm(y-x)
+```
+
+#Make sure to label things for homework
+```{r}
+x = rnorm(20, 2, 3)
+y = 3+2*x + rnorm(20, 0, .5)
+plot(x,y)
+model2 = lsfit(x,y)
+abline(model2$coef)
+plot(x,y, xlab="name of macron", ylab="name of y", main="french politics")
+```
+#Parameter
+Use par() to see list different parameters for the function plot
+```{r}
+par()
+```
+
+Test a parameter
+
+- CEX = Character expansion of three
+```{r}
+plot(x,y, xlab="name of macron", ylab="name of y", main="Parameter", cex=3)
+```
+lwd changes the dots
+lty changes the distance between the dots
+```{r}
+plot(x,y)
+model2 = lsfit(x,y)
+par(cex=2, lwd=2, lty=3)
+abline(model2$coefficients)
+```
+Cube root of x
+
+Cube of -1 should be -1
+NaN gives Not a Number, why does it produce this? 
+Because R uses logarithms to carry out the computation. You cannot take cube root for a negative logarithm. Therefore we need to specify this more precisely.
+```{r}
+cube = function(x){x^(1/3)}
+cube(8)
+cube(-1)
+```
+
+== is equal
+```{r}
+cube = function(x){
+  if(x>0) z=x^(1/3)
+  if(x<0) z=-(-x)^(1/3)
+  if(x==0)z=0
+  z}
+```
+
+```{r}
+cube(-1)
+```
+
+```{r}
+install.packages("git")
+```
+
+```{r}
+git remote add origin https://github.com/petterbjerser/Introduction-to-R.git
+git push -u origin master
+```
+```{r}
+cars
+(plot(cars$speed, cars$dist))
+model1=lsfit(cars$speed, cars$dist)
+model1$coefficients
+abline(model$coefficients)
+moddiag = ls.diag(model1)
+names(moddiag)
+moddiag$std.err
+```
+```{r}
+attach(cars)
+plot(speed, dist)
+model1 <- lsfit(speed,dist)
+abline(model1$coefficients)
+moddiag=ls.diag(model1)
+moddiag$std.err
+moddiag$correlation
+```
+
+A C-test, we assume that the estimate is normal...
+```{r}
+mean(speed)
+model1 = lm(dist ~ speed)
+summary(model1)
+```
+
+#ANOVA
+Total Variability = variability explained by line + unexplained variability
+
+TSS = SSR+SSE
+SSR = sum of square regression
+SSE = sum of square error
+
+#The F-test
+
+Run a simple regression with a 100-datapoints,
+What is the degree of freedom?
+The first one is 1, 
+The second degree of freedom is that of the residual, 100-2=98
+
+The equation as interpreted by the computer
+- what is the significant level
+- what is 
+```{r}
+qf(0.95, 1, 98)
+qt(0.975,98)
+plot(0.01*(-500:500), dt(0.01*(-500:500),98))
+```
+
+This generates the critical threshold which is approximately 4.
+
+If the output is higher than this value we can discard the nullhypothesis.
+
+How do we decide if there is a significant relationship?
+- either BetaZero is very positive or very negative.
+- the size of this region needs to sum up to 5% of the entire area
+- 1.98 = sqrt(F) = 1.98 standard deviations away from the mean
+
+T-test is equivalent to F when you do simple linear regression
+
+#One-sided test is used for T-statistics?
+H0: Beta less than or equal to zero 
+HA: Beta is greater than zero
+
+#What is the critical level using T-statistics?
+```{r}
+qt(0.95, 98)
+```
+
+This gives us a critical value of 1.66.
+Therefore if our T-statistic is greater than the critical value of 1.66. 
+- Then we reject the null hypothesis and accept the null hypothesis.
+
+#You can also do a left side test
+- -1.66
+If you go further than -1.66 
+
+In an T-test you don't need to specify the degree of freedom in a model.
+
+#How do you interpret the output ?
+
+This can be expected to the final exam, interpret an output "erase some of the numbers and figure out the other numbers"
+
+```{r}
+attach(cars)
+model2=lm(dist ~ speed)
+summary(model2)
+```
+
+```{r}
+
+```
+
+T-value = t-statistics
+
+Estimate/std.error = t-value
+
+This tells us about the residual standard error.
+- What does this mean?
+- You take the residual standard errors
+
+F-statistics:
+- You get 48degrees of freedom, there must be 50 observations
+- Fstatistics is 89.57, if you take the sqrt(Fstatistics)= get the t-statistics
+- The p-value is the same as for the T-statistics
+
+
+```{r}
+anova(model2)
+```
+The ANOVA command asks R to give the breakdown of the analysis of the variance of the model. 
+
+- The first row tells us the sum of square related to the regression value
+- Sum sq 
+- Mean sq are (SumSq/1df) 
+- Sum sq/ residual 
+
+The F-value is the Sum of square of the regresison.
+
+#example question: test whether the itnercept is less than minus 10?
+- 
+
+If the alternative hypothesis can be on both sides of the null hypothesis then we use a two-sided test?
+When would that happen? It depends on how we define our null-hypothesis.
+- Betahat = 1, two sided
+
+#Sometimes you want to fit a model that goes through zero
+- Sometimes you want to force it, fit a model without intercept
+
+```{r}
+model3 = lm(formula=dist ~ speed -1)
+summary(model3)
+```
+Compare this with the other model?
+
+```{r}
+anova(model3)
+```
+
+What this is doing is that R is estimating a model that does not have an intercept. 
+- If we plot it we can sduty this
+
+```{r}
+plot(speed,dist)
+abline(model2$coefficients)
+abline(c(0, model3$coefficients))
+```
+
+Typically what happens is that if you force it to go through zero you get a more significant model (increasing the ratio between signal and noice). It does not mean that you get a better model. 
+Why?
+- You save one degree of freedom
+- You compute the total sum of squares differently between the models
+
+#fÖRELÄSNING 1 APRIL
+
+```{r}
+library(MASS)
+```
+
+```{r}
+attach(mammals)
+```
+
+```{r}
+plot(body[which(brain<1000)],brain[which(brain<1000)])
+```
+#to adress the issue of heteroscedacity
+
+We are going to change Y, square the vertical coordinate.
+However, this makes it worse.
+
+```{r}
+plot(body[which(brain<1000)],(brain^2)[which(brain<1000)])
+```
+
+Instead of doing this, we will try to do the transformation of both at the same time by taking the square root, see slide 36
+
+```{r}
+plot((body^1/2)[which(brain<1000)],(brain^1/2)[which(brain<1000)])
+```
+```{r}
+plot(body^(1/4), brain^(1/4))
+```
+
+It does not make sense to take further powers...
+
+```{r}
+plot(log(body), log(brain))
+abline(lm(log(brain) ~ log(body))$coefficients)
+```
+It does not look like there are great problems with heteroskedacity when taking using the transformation with the power.
+
+What happens if we fit the linear model? (The wrong model)
+
+```{r}
+model1 = lm(brain ~ body, data = mammals)
+summary(model1)
+```
+```{r}
+plot(body, residuals(model1))
+```
+By plotting the residual plot we can see that there is an issue with heteroskedacity.
+
+```{r}
+qqnorm(residuals(model1))
+```
+The QQ plot is not linear, we have curving down and curving up. This is not the S of the superman, its the S of the back of the toilet. This is heavy tailed qq plot.
+
+```{r}
+model2 = lm(log(brain) ~ log(body))
+summary(model2)
+#plot(body, residuals(model2))
+plot(log(body), residuals(model2))
+qqnorm(residuals(model2))
+```
+
+The two R-squares cannot be compared as one of them is in the log scale and the other one is in linear scale. 
+
+The residual plot needs to be fixed, see correction in afforementioned code.
+
+Comment:
+
+1. check to have high r square
+2. plot the residuals and check heteroskedacity
+3. plot qq graph
+```{r}
+
+```
+
+Outliers, relevant for homework
+- What is an outlier?
+- Some examples on the issue with outliers, bending the curves
+
+Example with artificial dataset
+```{r}
+x = rnorm(30,1,1)
+y = 2 + 3*x + rnorm(30,0,.5)
+
+x[30] = 97
+y[30] = 0
+plot(x,y)
+model1=lm(y[-30] ~ x[-30])
+abline(model1)
+```
+
+
+```{r}
+model2 = lm(y ~ x)
+plot(x,y)
+abline(model2)
+```
+
+
+x[30] = 97
+y[30] = 0
+plot(x,y)
+model1=lm(y[-30] ~ x[-30])
+abline(model1)
+model2 = lm(y ~ x)
+plot(x,y)
+abline(model2)
+
+leverage diagonal of the hat matrix
+- the ability of a ?? model
+
+How to find outliers and influential points will be dealt with in the next class.
+
+#residual is the distance between a data point and the regression line
+#the leverage is the diagonal numbers on the hat matrix
+```{r}
+x =rnorm(30,1,1)
+y=2+3*x + rnorm(30,0,.5)
+
+x[30] = 98
+y[30] = 0
+plot(x,y)
+model1 =lm(y ~ x)
+plot(x, residuals(model1))
+#the barplot helps us illustrate the distribution of the leverages. this helps us identify points with high leverage. these have the potential to be the influential points. this helps us assess the quality of the model. we don't want the model to change significantly if we remove or change one data point. this would mean that the entire model is predicted because of one data point. 
+#the leverage is completely different from an outlier
+barplot(hat(x))
+hat(x)
+#rule of thumb concerning leverages: the sum of the leverages sums up the numbers of parameters you are estimating in your linear model
+#
+sum(hat(x))
+#the sum of all the leverages will be two, which is the same as the total number of parameters that we estimate in a model
+#abline(h=2*2/length(x))
+barplot(hat(x[-30]))
+abline(h=2*2/length(x[-30]))
+#the line is the cut-off that determines what is considered as a high leverage according to the rule of thumb.
+#however this is not a leverage point as the model fits the data
+```
+#Should we remove data points that are outliers and influential?
+THis depends
+- How do we define an outlier? A point that is far away from what your model predicts. AN outlier is therefore defined according to your model. If you change your model this data point might no longer be an outlier. 
+We should not remove them in general, rather think about them.
+
+#Example MLR
+
+```{r}
+#the plots only gives us an idea of linear relationships
+pairs(cats)
+```
+
+```{r}
+attach(cats)
+```
+
+```{r}
+model1 =lm(Hwt~Sex+Bwt)
+summary(model1)
+#p-value for marginal test.
+#this p-value states how significant is the x variable after you have already considered the other values
+```
+
+```{r}
+#mixing cemichals
+pairs(cement)
+#model2= lm(y~x1+x2+x3+x4, data=cement)
+#summary(model2)
+#model3= lm(y ~ x1+x2+x3, data=cement)
+#summary(model3)
+model4= lm(y~x4, data=cement)
+summary(model4)
+```
+
+
+```{r}
+#When adding x1-x3 there is not much more explanation to the relationship.
+#what does this mean for our model as x4 is highly related to the model. 
+#the ordering in which the kids entered the room matters, if the first kid enters the room first it will take a large fraction of the chips, the second takes a fraction of the first one, who ate the most chips? There is less variation to explain as more kids enter the room. The first kids eats 67% of the chips in the room. The rest of the kids share the remaining explanation.
+
+#the hypothesis that the T-test is testing in relation to X1 is: after x2,3,4 is included into the model, is X1 still significant? "If I include al other variables already, is my X1 still significant?" This applies for the other variables as well.
+
+#wait a minute, none of the values are significant, but the f-statistic is very large, how can this happen? because the four numbers are the marginal test and the entire model remains significant.
+
+#the p-value, this is how likely we are to get this estimate under our null-hypothesis, in this particular case (x1) 0.7, if we have X2,X3,X4 in the model already and we add X1, suppose X1 = 0, how likely are we to see that this estimate (1.55). This value is 0.07, the probability that we see this estimate so far away from zero is 0.07. (Assume that we would have the p-value would be 0.007, it is extremely unlikely to see this estimate if the null hypothesis was true, this is how we can reject the null hypothesis even if we include all the other variables.)
+```
+
+```{r}
+#WE are going to make use of this sequencing argument.
+#The last variable enters in whether its significant or not.
+#this will be discussion for the next session, significant values are marginal tests and are not directly comparable with each other
+```
+
+```{r}
+#comment on r-squared: comment on r-value, compare the r-value between models, are they comparable across models and how can we compare them?
+#Seven things we are looking for in the assignment
+#2.2: the fitted model is always a relationship between different variables, difference between log linearised and non-linearised model, relationship across different scales: what is the relationship in the original scale? I don't want the Y to appear as a log of Y, only as a Y this time.
+#relationship between p-value and t-value, 
+#t-value = estimate / standard error
+#p-value how likely under the null are you to get a t-value that is higher than the one you got, just by chance.
+#1.6 asking about rational and asking to test it statistically
+#2. confidence intervals
+#1.5 an anova table and a test is not the same thing, you can use the anova table to obtain a test for something, in itself its not a test its just a list of sum of squares, anova table is the table of the composition of the variance, 
+#second part of 1.5: test wether its significance at a.15 level, we have done testing of mdoels, t and f-tests, we can use either one of them 
+#transforming the prediction interval: related to the beginning of the question, "write down the fitted model in terms of original response and not the transformed" asking for an itnerval, and what is this about, the interval in the log scale is about transforming the log scale into the original scale, the same applies with the model (the context of prediction) if you have the interval in the log scale how do you transform it back to the original scale?
+
+#one answer: there is nothing wrong with the data point, its an influential point, it is an outlier or sometimes a data point can be an influential point that then changes... what was responsible for the change?
+```
+
+#The marginal test
+- if we have 
+```{r}
+pairs(cement)
+model2= lm(y~x1+x2+x3+x4, data=cement)
+#summary(model2)
+#model3= lm(y ~ x1+x2+x3, data=cement)
+#summary(model3)
+model4= lm(y~x4, data=cement)
+summary(model4)
+```
+
+
+```{r}
+summary(model2)
+anova(model2)
+```
+The anova model tests the different variables sequentially because the ordering matters. THerefore p-values are the p-values for sequentially testing the significance.
+
+The summary model, is not sequential and as such p-values equal those values that are fitted lastly in the anova model.
+
+#Test for Beta=3=Beta4=0
+#Two methods
+#Method 1: ordering
+- as long as x3 and x4 is fitted last the test is good to go
+```{r}
+model3 = lm(y~x1+x2+x3+x4, data=cement)
+#anova allows us to study sum of squares of the model
+anova(model3)
+#in doing f-test we need to calculate f-statistics, we calculate the signal (estimate) to noice ratio (standard error),
+# we divide by 2 because we want the average contribution
+# we divide by signal to noice ratio ((sum sq/df) = residual = MSE)
+fstat = ((0.109+9.932)/2)/(47.865/8)
+#when do we reject the null hypothesis?
+# if f-stat is larger than our cut-of
+# signal = 2, (SE) noice = 8
+qf(0.95,2,8)
+#the f-value = 4.45 > 1.96 and we accept the null hypothesis that beta3=beta4=0
+```
+#method 2 
+Here ordering does not matter
+```{r}
+model3 = lm(y~x1+x2+x3+x4, data=cement)
+#reduced model is the model with the restriction of the null hypothesis
+modelreduced = lm(y~x2+x1, data=cement)
+anova(model3)
+#looking at the difference in the sum of square we can see the contribution
+#Sum of square in full model
+ssrfull=(1450.08+1207.78+ 9.79+0.25+47.86)
+
+#Sum of square in the reduced model
+anova(modelreduced)
+ssrred= 1809.43+848.43+57.90
+fstat=(ssrfull-ssrred)/2 /(27.864/8)
+fstat
+#reject if fstat is larger than cutoff
+qf(0.95,2,8)
+```
+
+f-stat is much smaller than the cutof so we do not reject the null hypothesis
+
+#Slide 54
+Sometimes we want to do other types of tests.
+- adding variables together:
+b2+b3
+- we want to know if the values are the same
+- maybe the influence of one factor on two different variables are the same (example of currencies)
+- how do we test these hypothesis? 
+- we compare using ful-model // reduced-model approach
+
+The signal is the difference of the total sum of squares in the two models.
+
+THe prediction of the multiple linear regresison is the same as before.
+
+```{r}
+#test beta 1 = 2*beta2
+#full model
+model3 = lm(y~x1+x2+x3+x4, data=cement)
+#reduced model
+#y = beta0 + beta1*x1 +beta2*x2+ beta3*x3 + beta4*x4
+#y = beta0 + beta2*(2*x1+x2)+ beta3*x3 + beta4*x4
+
+#the reduced model is the same as fitting y over three regressors
+xnew=(2*x1+x2)
+modelreduced = lm(y~xnew+x3+x4)
+#we are going to test if the full model is explaining significantly more than the reduced mode
+#if this is true we should not reduce the model,
+#fstat = signal/noice = estimate / standard error
+anova(model3)
+anova(modelreduced)
+#comparing the difference in the sum of squares explained in each models by comparing the residuals
+#the difference is the additional sum of square divided by the big model 
+#this is divided by the degree of freedom
+#fstat(sum sq(smaller model - bigger model) /df(big-small)
+fstat=(50.675 - 47.89)/(5-4)/(47.86/8)
+#reject null hypothesis (the reduced model) if fstat is larger than cut of
+qf(0.95, 1,8)
+#numerator has df 1, denominator has df=8
+fstat
+```
+
+fstat= 0.464 < 5.3176 we cannot reject the null hypothesis and we accept that beta 1 = 2*beta2 at 5% level of significance.
+
+#Class 04/22
+#model diagnostics
+```{r}
+library(MASS)
+attach(cement)
+```
+
+```{r}
+ynew= y-x1
+xnew= x1+x2
+anova(lm(ynew~xnew+x3+x4))
+anova(lm(y~x1+x2+x3+x4))
+```
+```{r}
+48.05-47.86/1/5.98
+qf(0.95,1,8)
+#reduced model and full model does not differ significantly in their explanation power
+#therefore we can say that b1 = 1+b2
+```
+
+```{r}
+model1 =lsfit(cbind(x1,x2,x3,x4),y)
+model1.diag= ls.diag(model1)
+names(model1.diag)
+```
+#residual plots
+```{r}
+model2= lm(y~x1+x2+x3+x4)
+plot(fitted(model2), model1.diag$stud.res)
+```
+
+¤finding outliers using a t distribution
+```{r}
+qt(.975,13-5-1)
+which(abs(model1.diag$stud.res)>2.354524)
+```
+In looking for outliers, why do we need the 13-5-1?
+This is the degrees of freedom for the T-distribution
+There are 13 residuals, each one of them when we standardise them we can approximate them using a normal distribution or a normal distribution, and if they are similar we can use the same.
+- 13 is the number of data points that we start with
+- when we reduce the degrees of freedom, we estimate five parameters (-5)
+- why do we do the minus 1 (leave one out) you estimate the thing without the i:th datapoint
+
+```{r}
+View(cement)
+```
+
+```{r}
+summary(model1)
+```
+
+#wealways use the externally standardised residuals
+#the idea is that we want to remove the influence of a data-point on the model
+```{r}
+qt(.995,13-5-1)
+which(abs(model1.diag$stud.res)>2.354524)
+```
+
+```{r}
+which(abs(model1.diag$stud.res)>3.499483)
+```
+
+```{r}
+qqnorm(model1.diag$stud.res)
+```
+There is no normality assumption
